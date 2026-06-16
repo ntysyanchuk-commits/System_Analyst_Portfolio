@@ -1,0 +1,109 @@
+@startuml
+
+class Visitor {
+- visitorId : int
+- fullName : string
+# email : string
+
++ register()
++ login()
++ viewPurchaseHistory()
+}
+
+class Administrator {
+- adminId : int
+- role : string
+# accessLevel : int
+
++ manageTicketTypes()
++ configureSchedule()
++ generateReport()
+}
+
+class Purchase {
+- purchaseId : int
+- purchaseDate : date
+# status : string
+
++ addTicket()
++ removeTicket()
++ calculateTotal()
+}
+
+class Ticket {
+- ticketId : int
+# visitDate : date
+- status : string
+
++ activate()
++ validate()
++ cancel()
+}
+
+class TicketType {
+- typeId : int
+# name : string
+- price : float
+
++ create()
++ updatePrice()
++ deactivate()
+}
+
+class Payment {
+- paymentId : int
+# amount : float
+- paymentDate : date
+
++ processPayment()
++ refund()
++ generateReceipt()
+}
+
+class QRCode {
+- code : string
+# createdAt : date
+- isValid : boolean
+
++ generate()
++ validate()
++ deactivate()
+}
+
+class Notification {
+- notificationId : int
+# type : string
+- message : string
+
++ sendEmail()
++ sendSMS()
++ markAsSent()
+}
+
+class Turnstile {
+- turnstileId : int
+# location : string
+- status : string
+
++ scanQRCode()
++ open()
++ close()
+}
+
+Visitor "1" -- "0..*" Purchase : makes
+
+Purchase "1" *-- "1..*" Ticket : contains
+
+Ticket "1" *-- "1" QRCode : has
+
+TicketType "1" o-- "0..*" Ticket : defines
+
+Purchase "1" -- "1" Payment : payment
+
+Visitor "1" -- "0..*" Notification : receives
+
+Turnstile "0..*" -- "0..*" Ticket : scans
+
+Administrator "1" -- "0..*" TicketType : manages
+
+@enduml
